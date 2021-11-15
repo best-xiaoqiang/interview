@@ -10,9 +10,9 @@ least recent used
 组长订的桌子上的烤鱼  
 每个员工碗里的饭  
 
-作用域链：每个人依次可以吃碗里的饭——>桌上的烤鱼——>包间里的烧烤摊——>董事长订的大蛋糕。
-垃圾回收机制：服务员收拾餐具。
-闭包：虽然董事长走了，但是即使只剩一个员工还在吃，服务员都不会收走董事长订的大蛋糕。
+作用域链：每个人依次可以吃碗里的饭——>桌上的烤鱼——>包间里的烧烤摊——>董事长订的大蛋糕。  
+垃圾回收机制：服务员收拾餐具。  
+闭包：虽然董事长走了，但是即使只剩一个员工还在吃，服务员都不会收走董事长订的大蛋糕。  
 
 ## new操作符
 [new操作符干了什么](https://www.jianshu.com/p/35414c2063e8)
@@ -23,10 +23,10 @@ o.proto = Foo.prototype //让这个o对象的 __proto__指向函数的原型prot
 Foo.call(o) //this指向o对象
 a = o //将o对象赋给a对象
 ```
-1.招生
-2.加助理联系方式
-3.培训
-4.毕业
+1.招生  
+2.加助理联系方式  
+3.培训  
+4.毕业  
 
 ## 继承
 [js继承的6种方式](https://www.cnblogs.com/ranyonsue/p/11201730.html)
@@ -38,30 +38,30 @@ a = o //将o对象赋给a对象
 
 ## 属性描述符
 
-属性描述符
+属性描述符  
 * configurable 可配置
 * enumerable 可枚举
 * value 值
-* writable 可写
+* writable 可写  
 或
 * configurable 可配置
 * enumerable 可枚举
 * get
 * set
 
-机械手表
-  configurable 关闭就不能打开的一次性后盖
-  enumerable 隐身开关
-  value 显示的值
-  writable 正面玻璃盖
-电子手表
-  get
-  set
+机械手表  
+  configurable 关闭就不能打开的一次性后盖  
+  enumerable 隐身开关  
+  value 显示的值  
+  writable 正面玻璃盖  
+电子手表  
+  get  
+  set  
 
-configurable
-  1.在false情况下，如果修改，不管是不是严格模式，都会抛出TypeError的错误
-  2.在这种情况下，我们仍可以将可写性的状态由true改为false（最后盖上玻璃盖）
-  3.delete属性也会被禁止(delete myObject.a;)
+configurable  
+  1.在false情况下，如果修改，不管是不是严格模式，都会抛出TypeError的错误  
+  2.在这种情况下，我们仍可以将可写性的状态由true改为false（最后盖上玻璃盖）  
+  3.delete属性也会被禁止(delete myObject.a;)  
 
 ## Object.defineProperty和Proxy区别
 区别|Object.defineProperty|Proxy
@@ -72,10 +72,10 @@ configurable
 性能|不好<br>（对深层对象劫持要一次性递归）|好<br>（只在getter时才进行对象下一次属性的劫持）
 兼容性|不兼容ie8<br>（ES5属性）|Proxy没办法被完全polyfill<br>（ES6属性）
 
-电子表和机械表
-对整个对象劫持：wifi
-监视新增和删除：防盗感应
-监听数组方法：
+电子表和机械表  
+对整个对象劫持：wifi  
+监视新增和删除：防盗感应  
+监听数组方法：  
 
 ## Vue
 [简易版本vue的实现](https://www.cnblogs.com/aaron---blog/p/10577662.html)
@@ -105,15 +105,15 @@ defineReactive(obj,key,val){
 }
 ```
 #### Observe的作用
-监听数据变化。
-  创建一个Dep实例。
-  在数据被请求时：
-    1.判断是否为Dep访问（Dep.target不为空），
-      是则在Dep实例的监视数组中添加Dep.target（一个Watcher的实例）。
-    2.返回值。
-  在数据被改变时：
-    1.设置新值。
-    2.Dep实例通知其监视数组中的所有Watcher实例运行更新方法。
+监听数据变化。  
+  创建一个Dep实例。  
+  在数据被请求时：  
+    1.判断是否为Dep访问（Dep.target不为空），  
+      是则在Dep实例的监视数组中添加Dep.target（一个Watcher的实例）。  
+    2.返回值。  
+  在数据被改变时：  
+    1.设置新值。  
+    2.Dep实例通知其监视数组中的所有Watcher实例运行更新方法。  
 
 ```
 class Dep {
@@ -134,12 +134,12 @@ class Dep {
 }
 ```
 #### Dep的作用
-管理Watcher实例。
-  Dep本身：
-    传输Watcher实例给对应的Dep实例。
-  Dep实例：
-    1.存储Watcher实例。
-    2.通知Watcher实例更新。
+管理Watcher实例。  
+  Dep本身：  
+    传输Watcher实例给对应的Dep实例。  
+  Dep实例：  
+    1.存储Watcher实例。  
+    2.通知Watcher实例更新。  
 
 ```
 class Watcher {
@@ -163,10 +163,10 @@ class Watcher {
 }
 ```
 #### Watcher的作用
-  1.创建对应某属性的实例。
-  2.将自己的实例暂时传递给Dep.target并访问对应属性，
-    以达到通过Dep.target将Watcher实例添加到对应Dep实例的监视数组的目的。
-  3.定义更新方法。
+  1.创建对应某属性的实例。  
+  2.将自己的实例暂时传递给Dep.target并访问对应属性，  
+    以达到通过Dep.target将Watcher实例添加到对应Dep实例的监视数组的目的。  
+  3.定义更新方法。  
 
 ```
 class Compile {
@@ -311,11 +311,11 @@ class Compile {
 }
 ```
 #### Compile的作用
-查找并添加更新方式。
-  1.定义不同绑定类型（各种指令、事件或插值文本）的更新方式。
-  2.递归查找宿主节点中不同绑定类型中的值，即为数据要绑定的key。
-  3.初始化：根据要绑定的数据的value，执行相关更新方式。
-  4.创建要绑定的数据的Watcher实例，并将更新方式传给它。
+查找并添加更新方式。  
+  1.定义不同绑定类型（各种指令、事件或插值文本）的更新方式。  
+  2.递归查找宿主节点中不同绑定类型中的值，即为数据要绑定的key。  
+  3.初始化：根据要绑定的数据的value，执行相关更新方式。  
+  4.创建要绑定的数据的Watcher实例，并将更新方式传给它。  
 
 
 ## 其它
