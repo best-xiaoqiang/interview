@@ -1,5 +1,3 @@
-测试换行1  
-测试换行2
 ## LRU
 least recent used
 ![image](https://user-images.githubusercontent.com/27996959/120997182-92c20c80-c7b9-11eb-9491-54449de6dc5c.png)
@@ -79,6 +77,25 @@ configurable
 
 ## Vue
 [简易版本vue的实现](https://www.cnblogs.com/aaron---blog/p/10577662.html)
+
+Compile定义了不同绑定方式（指令、事件、插值文本）所对应的更新dom的方式，  
+并通过递归解析出不同绑定方式里需要绑定的数据，  
+然后根据绑定数据的值和对应绑定方式更新dom的方式，  
+去初始化dom。  
+同时创建一个以该绑定数据为监视数据、  
+以该更新dom方式为其更新方式的Watcher实例。
+
+Dep创建的实例用来存储Watcher实例。  
+早在Compile之前，  
+Observe就通过Object.defineProperty对数据进行了劫持，  
+同时为对应数据添加一个Dep实例，  
+当set数据时，通知所有Watcher实例进行更新；  
+当get数据时，如果Dep.target不为空则将Dep.target作为Watcher实例存到dep实例中。  
+而Compile并创建Watcher实例时，  
+Watcher就是通过将自己赋值给Dep.target，
+同时访问对应数据触发数据的get方法，  
+从而将某数据的Watcher添加到该数据对应的dep里。
+
 
 ```
 //  数据响应
@@ -312,7 +329,7 @@ class Compile {
 ```
 #### Compile的作用
 查找并添加更新方式。  
-  1.定义不同绑定类型（各种指令、事件或插值文本）的更新方式。  
+  1.定义不同绑定类型（各种指令、事件或插值文本）的更新dom方式。  
   2.递归查找宿主节点中不同绑定类型中的值，即为数据要绑定的key。  
   3.初始化：根据要绑定的数据的value，执行相关更新方式。  
   4.创建要绑定的数据的Watcher实例，并将更新方式传给它。  
