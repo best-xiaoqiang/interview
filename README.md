@@ -1,3 +1,29 @@
+## setInterval和setTimeout
+[setInterval和setTimeout](https://www.jianshu.com/p/fc9a08ca2c92)
+#### 时间
+setInterval： 相邻两次添加队列的时间间隔  
+用setTimeout模拟setInterval： 上一次任务执行完成和下一次任务添加到队列的时间间隔
+
+#### setInterval问题
+1. 当任务执行时间大于时间间隔，下一次任务会继续等待，并在上一次任务执行完成时立即执行。
+2. 同一个定时器在任务队列中只会有一个回调函数，当任务执行时间大于N个时间间隔时，也只有一个任务在等待。
+
+setInterval
+整点挂号；  
+下个整点上个病人仍在就诊时，依然可以挂号并在候诊室等候；  
+候诊室最多允许一人等候，当候诊室已经有人时整点不开放挂号。
+
+用setTimeout模拟setInterval  
+上个病人就诊结束后，医生休息一定时长后开放挂号。
+
+## 事件循环机制
+单线程：医生  
+执行栈：正在进行的诊断  
+微任务：进行过相应检查并回来找大夫诊断的人  
+宏任务：挂号等待的人  
+
+[microtask queue存储的任务，必须要在当前函数执行栈为空时才会开始调度](https://segmentfault.com/a/1190000019123388)
+
 ## LRU
 least recent used
 ![image](https://user-images.githubusercontent.com/27996959/120997182-92c20c80-c7b9-11eb-9491-54449de6dc5c.png)
@@ -29,6 +55,30 @@ a = o //将o对象赋给a对象
 ## 继承
 [js继承的6种方式](https://www.cnblogs.com/ranyonsue/p/11201730.html)
 
+```
+function Person(name){
+  this.name = name
+  this.sum = function(){
+    alert(this.name)
+  }
+}
+```
+寄生组合式继承
+```
+function content(obj){
+  function F(){}
+  F.prototype = obj
+  return new F()
+}
+var con = content(Person.prototype)
+function Sub(){
+  Person.call(this)
+}
+Sub.prototype = con
+con.constructor = Sub //给con补充constructor属性
+var sub1 = new Sub()
+console.log(sub1.age)
+```
 
 ## 强制缓存和协商缓存
 [深入理解浏览器的缓存机制](https://www.jianshu.com/p/54cc04190252)
@@ -72,10 +122,86 @@ configurable
 
 电子表和机械表  
 对整个对象劫持：wifi  
+兼容性：艳丽广告牌  
 监视新增和删除：防盗感应  
-监听数组方法：  
+监听数组方法：电脑管理  
+性能：调表员工  
+
+## CommonJS和ES Module的区别
+ES6 模块是编译时输出接口，是静态语法只能写在顶层。  
+CommonJS 模块是运行时加载 是动态语法可以写在判断里，  
+CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。  
+CommonJs 是单个值导出，ES6 Module可以导出多个。  
+CommonJs 的 this 是当前模块，ES6 Module的 this 是 undefined。  
+
+插座 电瓶 电动车。
+插座只能安在墙上；电瓶是骑车时才使用，可以选在拆下来。  
+插座提供的是发电厂传来的电；电瓶只是充的电；  
+插座可以有很多个；电池只有一个正负极接口；  
+插座无所谓谁用它；电瓶指定的使用者是电动车。  
+
 
 ## Vue
+#### .sync
+> 当我们想要在父组件和子组件之间对某个属性值进行双向绑定时,有什么便捷的方式？是的只要.sync修饰符即可办到
+
+
+```
+// 父组件
+<template>
+  <div class="sync-parent">
+    我是父组件: {{ text }}
+    <Child :text.sync="text" />
+  </div>
+</template>
+
+import Child from './child.vue'
+
+export default {
+  name: 'SyncParent',
+  data () {
+    return {
+      text: 'parent'
+    }
+  },
+  components: {
+    Child,
+  }
+}
+
+// 自组件
+<template>
+  <div class="child">
+    我是子组件: 
+    <input type="text" v-model="value" @input="onInput">
+  </div>
+</template>
+
+export default {
+  name: 'child',
+  props: {
+    text: {
+      type: String
+    }
+  },
+  data () {
+    return {
+      value: this.text
+    }
+  },
+  methods: {
+    onInput () {
+      // 注意这里，必须是update:xxx的形式xxx即属性prop
+      this.$emit('update:text', this.value)
+    }
+  }
+}
+
+作者：前端胖头鱼
+链接：https://juejin.cn/post/7026867875990208543
+```
+
+## Vue实现
 [简易版本vue的实现](https://www.cnblogs.com/aaron---blog/p/10577662.html)
 
 Compile定义了不同绑定方式（指令、事件、插值文本）所对应的更新dom的方式，  
@@ -92,7 +218,7 @@ Observe就通过Object.defineProperty对数据进行了劫持，
 当set数据时，通知所有Watcher实例进行更新；  
 当get数据时，如果Dep.target不为空则将Dep.target作为Watcher实例存到dep实例中。  
 而Compile并创建Watcher实例时，  
-Watcher就是通过将自己赋值给Dep.target，
+Watcher就是通过将自己赋值给Dep.target，  
 同时访问对应数据触发数据的get方法，  
 从而将某数据的Watcher添加到该数据对应的dep里。
 
