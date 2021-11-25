@@ -1,3 +1,57 @@
+## 跨域
+#### JSONP
+> JSONP 核心原理：script 标签不受同源策略约束，所以可以用来进行跨域请求，优点是兼容性好，但是只能用于 GET 请求
+
+```
+// 后端：
+ctx-- request-query-cb(jsonpCb)
+ctx-- body=`cb(${data})`
+
+// 前端：
+window.jsonpCb = (data){}
+<script src="http://xxx?cb=jsonpCb" />
+```
+cb：前后端商定一个传递回调函数名称的参数  
+data：返回数据  
+jsonpCb：回调函数函数名称  
+
+> 根据script不受同源策略的约束，通过后端传参调用函数的方式传递数据
+
+[前端实现jsonp](https://juejin.cn/post/6946022649768181774#heading-18)
+```
+const jsonp = ({ url, params, callbackName }) => {
+    const generateUrl = () => {
+        let dataSrc = ''
+        for (let key in params) {
+            if (params.hasOwnProperty(key)) {
+                dataSrc += `${key}=${params[key]}&`
+            }
+        }
+        dataSrc += `callback=${callbackName}`
+        return `${url}?${dataSrc}`
+    }
+    return new Promise((resolve, reject) => {
+        const scriptEle = document.createElement('script')
+        scriptEle.src = generateUrl()
+        document.body.appendChild(scriptEle)
+        window[callbackName] = data => {
+            resolve(data)
+            document.removeChild(scriptEle)
+        }
+    })
+}
+```
+
+## BFC
+[什么是BFC？看这一篇就够了](https://blog.csdn.net/sinat_36422236/article/details/88763187)  
+BFC：四边高度为2  
+普通div：左右边高度2（可折叠），上下边高度1；上下边宽度向右撑满  
+float：上边高度3，下边高度2，离地1；上下边宽度为设置值  
+overflow：上下边宽度向右撑满。（float和overflow可能在一行；同行下边界由overflow决定）  
+relative：原元素继续占位。新的一层；宽度向右撑满  
+absolute：新的一层；上下边宽度为设置值  
+margin：高度为1处的向外方向的棍子  
+
 ## setInterval和setTimeout
 [setInterval和setTimeout](https://www.jianshu.com/p/fc9a08ca2c92)
 #### 时间
@@ -17,6 +71,8 @@ setInterval
 上个病人就诊结束后，医生休息一定时长后开放挂号。
 
 ## 事件循环机制
+[详解JavaScript中的Event Loop（事件循环）机制](https://zhuanlan.zhihu.com/p/33058983)  
+
 单线程：医生  
 执行栈：正在进行的诊断  
 微任务：进行过相应检查并回来找大夫诊断的人  
@@ -462,12 +518,14 @@ class Compile {
 
 
 ## 其它
+#### 默认值
 > 如果一个数组成员不严格等于undefined，默认值不会生效
 ```
 [x = 1] = [undefined] // x:1
 [y = 1] = [null] // y:null
 ```
-***
+
+#### 赋值和取值
 > 赋值是倒着赋的，取值是正着取的
 ```
 var a = {n: 1};
@@ -477,7 +535,38 @@ console.log(a.x)
 console.log(b.x)
 ```
 所以最终的{n:2}是赋给b.x。
-***
-html、css、js设置缓存？
+
+#### html、css、js设置缓存？
 `?v=xxx`
-***
+
+#### concat
+> 参数可以是具体的值，也可以是数组对象。可以是任意多个。如果要进行 concat() 操作的参数是数组，那么添加的是数组中的元素，而不是数组
+```
+[1,2,3].concat(4,5,6)   // [1,2,3,4,5,6]
+[1,2,3].concat(4,[5,6]) // [1,2,3,4,5,6]
+[1,2,3].concat([4,5,6]) // [1,2,3,4,5,6]
+
+[1, [2, [3]]].flat(2)  // [1, 2, 3]
+// 实现扁平化flat
+function flatten(arr){
+  while(arr.some(item => Array.isArray(item))){
+    arr = [].concat(...arr)
+  }
+  return arr
+}
+```
+[数组扁平化](https://juejin.cn/post/6946022649768181774#heading-8)
+
+#### 字符串模版
+[字符串模版](https://juejin.cn/post/6946022649768181774#heading-12)
+```
+function render(template, data) {
+  const reg = /\{\{(\w+)\}\}/; // 模板字符串正则
+  if (reg.test(template)) { // 判断模板里是否有模板字符串
+    const name = reg.exec(template)[1]; // 查找当前模板里第一个模板字符串的字段
+    template = template.replace(reg, data[name]); // 将第一个模板字符串渲染
+    return render(template, data); // 递归的渲染并返回渲染后的结构
+  }
+  return template; // 如果模板没有模板字符串直接返回
+}
+```
