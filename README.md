@@ -1,11 +1,93 @@
+> 是啥？能干啥？为啥能做？
+
+## 从URL输入到页面展现到底发生什么？
+### DNS
+DNS缓存：缓存地址  
+DNS负载均衡（DNS重定向）：指向不同的地址  
+CDN：利用DNS重定向技术、指向最近的地址
+
+### 域名解析
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/20fcf62b9dc24b57a977d42efb9c8f43~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp)
+
+### TCP三次握手
+第一次：客户端的发送功能  
+第二次：服务端的接收功能和发送功能  
+第三次：客户端的接收功能  
+
+### TCP四次挥手
+客户端：我要走了  
+服务端：好的  
+服务端：（拿来商品清单）  
+客户端：（签字离开）  
+
+
+## script 标签中 defer 和 async 的区别
+script ：会阻碍 HTML 解析，只有下载好并执行完脚本才会继续解析HTML。  
+async script ：解析 HTML 过程中进行脚本的异步下载，下载成功立马执行，有可能会阻断 HTML 的解析。  
+defer script：完全不会阻碍 HTML 的解析，解析完成之后再按照顺序执行脚本。  
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8ea091aed8364b88a653a13c4845a824~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp)  
+
+解析HTML：打游戏；  
+下载script：女朋友过来；  
+执行script：接待女朋友。  
+
+三种方式：  
+script：亲自接女朋友过来并接待，其间都不能打游戏；  
+async script：女朋友自己打车过来，到了之后立刻停止打游戏并接待她；  
+defer script：女朋友自己打车过来，到了之后你先打完游戏再接待她。
+
+## TypeScript
+[TypeScript体操运动员进阶指南](https://juejin.cn/post/7070520164243996685)  
+### 泛型
+[一文读懂 TypeScript 泛型及应用](https://blog.csdn.net/qq_29438877/article/details/106774392)  
+是啥：泛型的本质是参数化类型，通俗的将就是所操作的数据类型被指定为一个参数。  
+能干啥：用在有一定类型逻辑同时类型不固定的函数、接口或类中。  
+为啥能做：通过参数化类型的方式，类型灵活、可重用。  
+
+```
+// 一般接口这么写
+interface GenericIdentityFn {
+  arg: number;
+}
+// 泛型接口
+interface GenericIdentityFn<Type> {
+  (arg: Type): Type;
+}
+let myIdentity: GenericIdentityFn<number> = identity;
+```
+
+
+## WeakSet和WeakMap
+[Set,Map的区别](https://zhuanlan.zhihu.com/p/81234278)
+#### WeakSet
+[WeakSet的学习，应用场景](https://www.jianshu.com/p/7eb38592c699)  
+WeakSet 的成员只能是对象  
+WeakSet 的对象都是弱引用  
+WeakSet 对象是无法被遍历的
+
+无法实现通过一个对象的数组来判断对象是否被垃圾回收，因为在该数组的对象不会被垃圾回收。  
+
+#### WeakMap
+```
+var map = new WeakMap(); // create a weak map
+function useObj(obj){
+  doSomethingWith(obj);
+  var called = map.get(obj) || 0;
+  called++; // called one more time
+  if(called > 10) report(); // Report called more than 10 times
+  map.set(obj, called);
+}
+// 防止了内存泄漏
+```
+
 ## 跨域
 #### JSONP
 > JSONP 核心原理：script 标签不受同源策略约束，所以可以用来进行跨域请求，优点是兼容性好，但是只能用于 GET 请求
 
 ```
 // 后端：
-ctx-- request-query-cb(jsonpCb)
-ctx-- body=`cb(${data})`
+ctx-- request-query-cb (cb接收到jsonpCb)
+ctx-- body=`jsonpCb(${data})`（然后传入参数调用这个函数名称）
 
 // 前端：
 window.jsonpCb = (data){}
@@ -42,11 +124,11 @@ const jsonp = ({ url, params, callbackName }) => {
 }
 ```
 
-## BFC
+## BFC（隔三个月后看不懂、需要再优化总结）
 [什么是BFC？看这一篇就够了](https://blog.csdn.net/sinat_36422236/article/details/88763187)  
 BFC：四边高度为2  
 普通div：左右边高度2（可折叠），上下边高度1；上下边宽度向右撑满  
-float：上边高度3，下边高度2，离地1；上下边宽度为设置值  
+float：上边高度3(接地1+高度2)，下边高度2，离地1；上下边宽度为设置值  
 overflow：上下边宽度向右撑满。（float和overflow可能在一行；同行下边界由overflow决定）  
 relative：原元素继续占位。新的一层；宽度向右撑满  
 absolute：新的一层；上下边宽度为设置值  
@@ -65,18 +147,31 @@ setInterval： 相邻两次添加队列的时间间隔
 setInterval
 整点挂号；  
 下个整点上个病人仍在就诊时，依然可以挂号并在候诊室等候；  
-候诊室最多允许一人等候，当候诊室已经有人时整点不开放挂号。
+候诊室最多允许一人等候，当候诊室已经有人时整点不开放挂号。  
 
 用setTimeout模拟setInterval  
 上个病人就诊结束后，医生休息一定时长后开放挂号。
+
+#### requestAnimationFrame
+[requestAnimationFrame详解](https://www.jianshu.com/p/fa5512dfb4f5)  
+requestAnimationFrame的步伐跟着系统的刷新步伐，它能保证回调函数在屏幕每次的刷新间隔中只被执行一次，这样就不会丢帧，也不会导致动画卡顿。  
+绝对时间间隔。
 
 ## 事件循环机制
 [详解JavaScript中的Event Loop（事件循环）机制](https://zhuanlan.zhihu.com/p/33058983)  
 
 单线程：医生  
-执行栈：正在进行的诊断  
-微任务：进行过相应检查并回来找大夫诊断的人  
-宏任务：挂号等待的人  
+执行栈：正在进行的诊治 
+微任务：进行过相应检查并回来找大夫诊断的人（在诊室等待）  
+宏任务：挂号等待的人（在候诊室等待）  
+正在执行的诊治：正在执行的微任务、宏任务，其它主线程任务
+
+被放入事件队列不会立刻执行其回调，而是等待当前执行栈中的所有任务都执行完毕，主线程处于闲置状态时，主线程会去查找事件队列是否有任务。  
+并且在当前执行栈为空的时候，主线程会 查看微任务队列是否有事件存在。如果不存在，那么再去宏任务队列中取出一个事件并把对应的回到加入当前执行栈；如果存在，则会依次执行队列中事件对应的回调，直到微任务队列为空，然后去宏任务队列中取出最前面的一个事件，把对应的回调加入当前执行栈...如此反复，进入循环。  
+
+医生在进行诊治时（给别人做手术、在诊室做诊断等），在诊室或候诊室等待的人要等医生诊治结束后才会被诊治。  
+在医生当前的诊治完成时，医生会优先对进行过相应检查并回来找大夫诊断的人诊断，全部诊断完成后，才回叫号候诊室等待的病人...如此反复，进入循环。
+
 
 [microtask queue存储的任务，必须要在当前函数执行栈为空时才会开始调度](https://segmentfault.com/a/1190000019123388)
 
@@ -93,6 +188,10 @@ least recent used
 作用域链：每个人依次可以吃碗里的饭——>桌上的烤鱼——>包间里的烧烤摊——>董事长订的大蛋糕。  
 垃圾回收机制：服务员收拾餐具。  
 闭包：虽然董事长走了，但是即使只剩一个员工还在吃，服务员都不会收走董事长订的大蛋糕。  
+
+闭包用于创建模块、外部函数的变量：  
+防止程序员破坏某个函数内的逻辑，只暴露出某个接口。
+
 
 ## new操作符
 [new操作符干了什么](https://www.jianshu.com/p/35414c2063e8)
@@ -260,6 +359,8 @@ export default {
 ## Vue实现
 [简易版本vue的实现](https://www.cnblogs.com/aaron---blog/p/10577662.html)
 
+#### 详细总结
+
 Compile定义了不同绑定方式（指令、事件、插值文本）所对应的更新dom的方式，  
 并通过递归解析出不同绑定方式里需要绑定的数据，  
 然后根据绑定数据的值和对应绑定方式更新dom的方式，  
@@ -277,6 +378,12 @@ Observe就通过Object.defineProperty对数据进行了劫持，
 Watcher就是通过将自己赋值给Dep.target，  
 同时访问对应数据触发数据的get方法，  
 从而将某数据的Watcher添加到该数据对应的dep里。
+
+#### 简单总结
+Compile解析确定不同属性和编译方法的对应关系  
+Watcher储存上述对应关系  
+Dep存储不同属性对应的Watcher  
+Observe负责提供执行编译方法的时机  
 
 
 ```
@@ -518,6 +625,15 @@ class Compile {
 
 
 ## 其它
+#### 三种隐藏方法的不同
+1.opacity：0，该元素隐藏起来了，但不会改变页面布局，并且，如果该元素已经绑定 一些事件，如click 事件，那么点击该区域，也能触发点击事件的  
+2.visibility：hidden，该元素隐藏起来了，但不会改变页面布局，但是不会触发该元素已 经绑定的事件 ，隐藏对应元素，在文档布局中仍保留原来的空间（重绘）   
+3.display：none，把元素隐藏起来，并且会改变页面布局，可以理解成在页面中把该元素。 不显示对应的元素，在文档布局中不再分配空间（回流+重绘）  
+
+opacity：0 ---> 隐身衣
+visibility：hidden  ---> 改上盖子（不会触发事件：被打不疼）
+display：none ---> 跑路（释放空间）
+
 #### 默认值
 > 如果一个数组成员不严格等于undefined，默认值不会生效
 ```
@@ -569,4 +685,16 @@ function render(template, data) {
   }
   return template; // 如果模板没有模板字符串直接返回
 }
+```
+
+#### toFixed
+```
+2.toFixed()
+// Uncaught SyntaxError: Invalid or unexpected token
+
+(2).toFixed()
+// 2
+
+2.2.toFixed()
+// 2
 ```
