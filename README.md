@@ -7,7 +7,34 @@ DNS负载均衡（DNS重定向）：指向不同的地址
 CDN：利用DNS重定向技术、指向最近的地址
 
 ### 域名解析
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/20fcf62b9dc24b57a977d42efb9c8f43~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp)
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/20fcf62b9dc24b57a977d42efb9c8f43~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp)  
+
+浏览器缓存 -> 系统缓存 -> 路由器缓存 -> 本地运营商缓存
+
+#### DNS服务器层次结构
+![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/408987c0882245cfb1c6a8d853c9d501~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp)
+
+根DNS服务器：管理顶级域DNS服务器。  
+顶级域DNS服务器：com、cn、edu等。提供权威DNS服务器的IP地址。  
+权威DNS服务器：例yahoo.com。返回主机-IP的最终映射。  
+
+www.yahoo.com --> ip 的过程：  
+1.主机向本地DNS服务器发送DNS查询报文；  
+2.本地DNS服务器转发给根DNS服务器；  
+3.根DNS返回com对应的顶级域DNS服务器；  
+4.本地DNS服务器转发给com对应的顶级域名DNS服务器；  
+5.com对应的顶级域名DNS服务器返回yahoo.com对应的权威DNS服务器；  
+6.本地DNS服务器转发给yahoo.com对应的权威DNS服务器；  
+7.yahoo.com对应的权威DNS服务器返回了www.yahoo.com的IP地址。  
+
+安国县.保定市.河北省  
+1.你告诉中介你要去这个地方；  
+2.中介问总部这个地方在哪儿；  
+3.总部告诉中介河北省分部的联系方式；  
+4.中介问河北省分部这个地方在哪儿；  
+5.河北省分部告诉你保定市分部的联系方式；  
+6.中介问河北省保定市分部这个地方在哪儿；  
+7.河北省保定市告诉了中介安国县在哪儿。  
 
 ### TCP三次握手
 第一次：客户端的发送功能  
@@ -16,10 +43,58 @@ CDN：利用DNS重定向技术、指向最近的地址
 
 ### TCP四次挥手
 客户端：我要走了  
-服务端：好的  
-服务端：（拿来商品清单）  
-客户端：（签字离开）  
+服务端：好的，我看下发完没有  
+服务端：发完了，拜拜  
+客户端：拜拜  
 
+
+## 重排重绘
+[什么是回流和重绘](https://blog.csdn.net/qq_43263320/article/details/118361602)  
+
+重排：积木  
+重绘：刷漆  
+
+### 减少回流
+* 缓存布局属性的值
+
+* 样式统一批量修改
+```
+// 1.同一个类
+testDom.classList.add('new-class')
+
+// 2.cssText
+testDom.style.cssText = 'width: 100px; height: 200px; border: 1px solid red;'
+```
+
+* 脱离文档流
+```
+// 1.display:none
+testDom.style.display = 'none'
+// 样式处理
+testDom.style.display = 'block'
+
+// 2.createDocumentFragment
+const fragment = document.createDocumentFragment()
+// 样式处理
+testDom.appendChild(fragment)
+
+// 3.cloneNode
+const cloneNode = testDom.cloneNode(true)
+// 样式处理
+testDom.parentNode.replaceChild(cloneNode, testDom)
+```
+
+* 新图层
+position: absolute;  
+position: fixed;  
+
+* 硬件加速
+transform  
+opacity  
+filter  
+
+* 避免使用table布局
+* 避免使用css表达式
 
 ## script 标签中 defer 和 async 的区别
 script ：会阻碍 HTML 解析，只有下载好并执行完脚本才会继续解析HTML。  
@@ -630,8 +705,8 @@ class Compile {
 2.visibility：hidden，该元素隐藏起来了，但不会改变页面布局，但是不会触发该元素已 经绑定的事件 ，隐藏对应元素，在文档布局中仍保留原来的空间（重绘）   
 3.display：none，把元素隐藏起来，并且会改变页面布局，可以理解成在页面中把该元素。 不显示对应的元素，在文档布局中不再分配空间（回流+重绘）  
 
-opacity：0 ---> 隐身衣
-visibility：hidden  ---> 改上盖子（不会触发事件：被打不疼）
+opacity：0 ---> 隐身衣  
+visibility：hidden  ---> 改上盖子（不会触发事件：被打不疼）  
 display：none ---> 跑路（释放空间）
 
 #### 默认值
