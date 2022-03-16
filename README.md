@@ -1,5 +1,17 @@
 > 是啥？能干啥？为啥能做？
 
+## 选择器优先级
+t0：内联样式  
+t1：ID选择器  
+t2：类选择器、属性选择器、伪类（:hover）  
+t3：标签选择器、伪元素（::after）  
+
+优先比较梯度；  
+梯度一样则比较出现数量；  
+!important > 没有!important的内联样式；  
+max-width > width。  
+
+
 ## 从URL输入到页面展现到底发生什么？
 ### DNS
 DNS缓存：缓存地址  
@@ -66,7 +78,7 @@ testDom.classList.add('new-class')
 testDom.style.cssText = 'width: 100px; height: 200px; border: 1px solid red;'
 ```
 
-* 脱离文档流
+* 批量操作、脱离文档流
 ```
 // 1.display:none
 testDom.style.display = 'none'
@@ -208,6 +220,13 @@ overflow：上下边宽度向右撑满。（float和overflow可能在一行；�
 relative：原元素继续占位。新的一层；宽度向右撑满  
 absolute：新的一层；上下边宽度为设置值  
 margin：高度为1处的向外方向的棍子  
+
+外边距重叠：两只并排放的帽子，帽檐可以重合；  
+父子外边距重叠：大帽子套着小帽子，帽檐依然可以重合；  
+BFC避免外边距重叠：将两只帽子放在包装盒中，帽檐不能重合。  
+
+上面例子，BFC的作用就是装箱。
+
 
 ## setInterval和setTimeout
 [setInterval和setTimeout](https://www.jianshu.com/p/fc9a08ca2c92)
