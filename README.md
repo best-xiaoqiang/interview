@@ -11,6 +11,8 @@ t3：标签选择器、伪元素（::after）
 !important > 没有!important的内联样式；  
 max-width > width。  
 
+## 圣杯布局
+[圣杯布局](https://zhuanlan.zhihu.com/p/103774667)
 
 ## 从URL输入到页面展现到底发生什么？
 ### DNS
@@ -332,6 +334,13 @@ console.log(sub1.age)
 ## 强制缓存和协商缓存
 [深入理解浏览器的缓存机制](https://www.jianshu.com/p/54cc04190252)
 ![](https://raw.githubusercontent.com/best-xiaoqiang/image/main/qianduan1/cache.png)
+
+流程：  
+![](https://raw.githubusercontent.com/best-xiaoqiang/image/main/qianduan1/cache2.png)
+
+f5/刷新按钮/右键刷新：强制缓存失效；  
+ctrl+f5/shift+command+r：强制缓存和协商缓存都失效。  
+
 
 ## 属性描述符
 
@@ -791,4 +800,18 @@ function render(template, data) {
 
 2.2.toFixed()
 // 2
+```
+
+#### 0.1+0.2不等于0.3
+0.1和0.2被转成二进制后无尽循环；  
+js采用的IEEE754浮点运算截断了。  
+
+解决：使用 Number.EPSILON 误差范围  
+```
+// Number.EPSILON 的实质是一个可以接受的最小误差范围
+function isEqual(a, b) {
+  return Math.abs(a - b) < Number.EPSILON;
+}
+
+console.log(isEqual(0.1 + 0.2, 0.3)); // true
 ```
