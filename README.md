@@ -271,6 +271,37 @@ requestAnimationFrame的步伐跟着系统的刷新步伐，它能保证回调�
 
 [microtask queue存储的任务，必须要在当前函数执行栈为空时才会开始调度](https://segmentfault.com/a/1190000019123388)
 
+## Promise
+[Promise你真的用明白了吗](https://juejin.cn/post/6869573288478113799)
+```
+let p = Promise.resolve();
+// 成员1号开跑
+p.then(() => {
+  console.log("then1");
+  // 成员3号开跑
+  Promise.resolve().then(() => {
+    console.log("then1-1");
+  });
+  // 执行完毕后、成员1号继续开跑（成员3比成员1更早开跑，所以then1-1先于then1-2）
+}).then(() => {
+  console.log("then1-2");
+});
+
+// 成员2号开跑
+p.then(() => {
+  console.log("then2");
+}); 
+
+// then1 then2 then1-1 then1-2
+```
+链式调用中，只有前一个 then 的回调执行完毕后，跟着的 then 中的回调才会被加入至微任务队列。  
+每个链式调用的开端会首先依次进入微任务队列。  
+
+.then：开跑。.then之后就会在路上；  
+每个链式调用的开端（每次首先调用.then的p）：新的人。  
+
+![](https://raw.githubusercontent.com/best-xiaoqiang/image/main/qianduan1/promise/run.png)
+
 ## LRU
 least recent used
 ![image](https://user-images.githubusercontent.com/27996959/120997182-92c20c80-c7b9-11eb-9491-54449de6dc5c.png)
@@ -769,6 +800,7 @@ console.log(b.x)
 // 实现扁平化flat
 function flatten(arr){
   while(arr.some(item => Array.isArray(item))){
+    // concat每次都可以去除一层[]
     arr = [].concat(...arr)
   }
   return arr
