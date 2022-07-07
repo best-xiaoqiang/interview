@@ -319,6 +319,11 @@ least recent used
 闭包用于创建模块、外部函数的变量：  
 防止程序员破坏某个函数内的逻辑，只暴露出某个接口。
 
+fooContext.Scope = fooContext.[[Scope]] + fooContext.VO  
+作用域 = 上级作用域通道 + 当前变量对象  
+当前楼层 = 楼梯 + 此楼层空间  
+作用域链：用楼梯串起来的楼空间  
+
 
 ## new操作符
 [new操作符干了什么](https://www.jianshu.com/p/35414c2063e8)
@@ -758,6 +763,34 @@ class Compile {
   4.创建要绑定的数据的Watcher实例，并将更新方式传给它。  
 
 
+## 手写
+[最全手写](https://juejin.cn/post/6968713283884974088#heading-9)
+### 柯里化
+```
+function currying(fn, ...args) {
+  const length = fn.length;
+  let allArgs = [...args];
+  const res = (...newArgs) => {
+    allArgs = [...allArgs, ...newArgs];
+    if (allArgs.length === length) {
+      return fn(...allArgs);
+    } else {
+      return res;
+    }
+  };
+  return res;
+}
+
+// 用法如下：
+// const add = (a, b, c) => a + b + c;
+// const a = currying(add, 1);
+// console.log(a(2,3))
+
+```
+帮忙暂存函数和已有参数；  
+返回一个接收和处理参数的助手；  
+根据接收参数的长度，长度够了返回函数处理结果，否则继续返回助手。
+
 ## 其它
 #### 三种隐藏方法的不同
 1.opacity：0，该元素隐藏起来了，但不会改变页面布局，并且，如果该元素已经绑定 一些事件，如click 事件，那么点击该区域，也能触发点击事件的  
@@ -765,8 +798,24 @@ class Compile {
 3.display：none，把元素隐藏起来，并且会改变页面布局，可以理解成在页面中把该元素。 不显示对应的元素，在文档布局中不再分配空间（回流+重绘）  
 
 opacity：0 ---> 隐身衣  
-visibility：hidden  ---> 改上盖子（不会触发事件：被打不疼）  
+visibility：hidden  ---> 用缸扣上（不会触发事件：被打不疼）  
 display：none ---> 跑路（释放空间）
+
+#### border-box和content-box
+width和height的含义不同：
+border-box：体积；  
+context-box：容积。
+
+#### 捕获和冒泡
+事件从Document对象沿文档树传递给目标节点，再从目标节点回传至Document对象。  
+从一个入口去往某个地点，再从该地点原路返回。（树状路线地图）  
+
+事件触发：开始动手；  
+捕获：来的时候动手；  
+冒泡：返程时候动手。  
+阻止冒泡（event.stopPropagation()）：让其有来无回。  
+在父元素上添加事件：在“必经之路”上的地方埋伏。
+
 
 #### 默认值
 > 如果一个数组成员不严格等于undefined，默认值不会生效
@@ -844,6 +893,9 @@ js采用的IEEE754浮点运算截断了。
 function isEqual(a, b) {
   return Math.abs(a - b) < Number.EPSILON;
 }
-
 console.log(isEqual(0.1 + 0.2, 0.3)); // true
 ```
+
+#### 函数和变量提升
+目的：提前在内存中开辟好空间。
+
