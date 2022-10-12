@@ -229,6 +229,8 @@ BFC避免外边距重叠：将两只帽子放在包装盒中，帽檐不能重�
 
 上面例子，BFC的作用就是装箱。
 
+margin更像伸出去的一根棍子。
+
 
 ## setInterval和setTimeout
 [setInterval和setTimeout](https://www.jianshu.com/p/fc9a08ca2c92)
@@ -436,6 +438,38 @@ CommonJs 的 this 是当前模块，ES6 Module的 this 是 undefined。
 
 
 ## Vue
+
+#### 8种通信方式
+[vue中8种组件通信方式, 值得收藏](https://juejin.cn/post/6844903887162310669)  
+props/$emit  
+$children/$parent  
+provide/reject  
+ref  
+eventBus  
+Vuex  
+localStorage/sessionStorage  
+$attrs/$listeners  
+
+[$attrs 和 $listeners](https://blog.csdn.net/qq_41709082/article/details/120725561)  
+
+$attrs:除了组件内props声名了的所有给组件传的值（class,style除外）。  
+
+父组件传递给子组件的值中，子组件未接收的值，更深的组件通过this.$attrs来接收。  
+你要剩下的就是我的，你要的可以再通过prop传给我。  
+
+props/$emit：水管/灯绳；  
+$children/$parent：楼梯；   
+provide/reject：从顶层挂出来的大字报；  
+ref：滑梯；  
+eventBus：电话；  
+Vuex：联网；  
+localStorage/sessionStorage：楼下邮箱；  
+$attrs/$listeners：顶层大灯。  
+
+    大灯、大字报   电脑  
+                 电话  楼梯  
+邮箱              水管  滑梯  
+
 #### .sync
 > 当我们想要在父组件和子组件之间对某个属性值进行双向绑定时,有什么便捷的方式？是的只要.sync修饰符即可办到
 
@@ -899,3 +933,8 @@ console.log(isEqual(0.1 + 0.2, 0.3)); // true
 #### 函数和变量提升
 目的：提前在内存中开辟好空间。
 
+#### 箭头函数this
+箭头函数体内的this对象，就是定义该函数时所在的作用域指向的对象。  
+（只有函数才能创建新作用域）  
+[ES6箭头函数的this指向详解](https://zhuanlan.zhihu.com/p/57204184)  
+[Introduction to arrow functions in JavaScript](https://www.30secondsofcode.org/articles/s/javascript-arrow-functions)  
